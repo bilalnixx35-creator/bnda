@@ -1,11 +1,14 @@
+// ==UserScript==
+// @name        BNDA Leaderboard Demo to live  + Auto Position 
+// @namespace   BNDA
+// @version     2.1
+// @description Editable leaderboard with popup, auto-position, slider red on loss, live mode, per-user storage, leaderboard name/flag/amount editing
+// @match       https://market-qx.trade/en/demo-trade
+// @grant       none
+// ==/UserScript==
+
 (async function () {
   'use strict';
-
-  // ✅ Only run on target site
-  if (!/market-qx\.trade\/en\/(demo-trade|trade)/.test(location.href)) {
-    console.log("BNDA: Not target page, aborting.");
-    return;
-  }
 
   const $ = s => document.querySelector(s);
   const $$ = s => Array.from(document.querySelectorAll(s));
@@ -146,6 +149,7 @@
       profitEl.style.color = diff<0?"#ff3e3e":"#0faf59";
     }
 
+    // UPDATE LEADERBOARD HEADER
     const data = JSON.parse(localStorage.getItem(KEY_LB)||'{}');
     if(data.name && data.flag){
       $$(selectors.lbNameHeader).forEach(box=>{
@@ -153,6 +157,7 @@
       });
     }
 
+    // UPDATE FOOTER
     const lbEl = $(selectors.lbMoney);
     const expandEl = $(selectors.expand);
     if(lbEl){
@@ -182,6 +187,9 @@
     updatePositionExpandOnProfitChange();
   }
 
+  // -----------------------
+  // LEVEL ICON & INFO UPDATE
+  // -----------------------
   function updateLevelInfo(){
     try{
       const bal=safeNum($(selectors.usermenuBalance)?.textContent);
@@ -205,6 +213,9 @@
     }catch(e){}
   }
 
+  // -----------------------
+  // LEADERBOARD EDIT POPUP
+  // -----------------------
   function createLeaderboardPopup() {
     if ($('#qx-leaderboard-popup')) return $('#qx-leaderboard-popup');
 
@@ -219,7 +230,7 @@
       <div style="width:470px;padding:25px;background:#1b1b2d;border-radius:15px;color:#fff;font-family:sans-serif;box-shadow:0 0 20px rgba(0,0,0,0.7);">
         <h2 style="text-align:center;margin-bottom:10px;">BNDA Leaderboard Edit</h2>
         <p style="text-align:center;font-size:13px;color:#aaa;margin-bottom:20px;">Edit your leaderboard info</p>
-
+        
         <label>👤 Name</label>
         <input id="lb-name" placeholder="Enter name" value="${saved.name||''}" style="width:100%;margin-bottom:10px;padding:8px;border-radius:6px;border:none;background:#2c2c44;color:#fff;" />
 
@@ -286,6 +297,7 @@
     return popupWrap;
   }
 
+  // OPEN POPUP ON CLICKING "Edit Leaderboard" (or deposit links)
   document.addEventListener('click', e=>{
     const t = e.target.closest('a,button');
     if(!t) return;
@@ -295,6 +307,9 @@
     }
   }, true);
 
+  // -----------------------
+  // OBSERVER
+  // -----------------------
   const observer = new MutationObserver(()=>{
     observer.disconnect();
     updateHeaderAndFooter();
@@ -303,6 +318,9 @@
   });
   observer.observe(document.body,{childList:true,subtree:true});
 
+  // -----------------------
+  // BOOT
+  // -----------------------
   function boot(){
     activateLiveMode();
     updateHeaderAndFooter();
