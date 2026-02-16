@@ -1,0 +1,1 @@
+alert("BNDA script working ✅");
