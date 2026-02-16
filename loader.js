@@ -1,10 +1,10 @@
 (() => {
 
-  const BRAND = "BNDA CAPITAL";
+  const BRAND = "BNDA X JSON";
   const PHONE = "+92 300 1234567";
-  const WHATSAPP = "https://wa.me/923001234567";
-  const TELEGRAM = "https://t.me/yourusername";
-  const TIKTOK = "https://www.tiktok.com/@yourid";
+  const WHATSAPP = "https://wa.me/923038592702";
+  const TELEGRAM = "https://t.me/BNDAXJSON";
+  const TIKTOK = "https://www.tiktok.com/@bndadeveloper";
 
   const VALID_KEYS = ["BNDA-1111", "BNDA-2222"];
 
